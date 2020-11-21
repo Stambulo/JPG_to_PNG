@@ -4,22 +4,23 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
 import com.stambulo.jpgtopng.presenter.Presenter;
-import com.stambulo.jpgtopng.view.View;
+import com.stambulo.jpgtopng.view.MainView;
 
 import moxy.MvpAppCompatActivity;
 import moxy.presenter.InjectPresenter;
 
-public class MainActivity extends MvpAppCompatActivity implements View {
+public class MainActivity extends MvpAppCompatActivity implements MainView, View.OnClickListener {
     @InjectPresenter
     Presenter presenter;
 
-    private ImageView jpgImage;
     private ImageView pngImage;
     private static final int PERMISSION_REQUEST_CODE = 10;
 
@@ -28,18 +29,13 @@ public class MainActivity extends MvpAppCompatActivity implements View {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        jpgImage = findViewById(R.id.jpgImageView);
+        Button startButton = findViewById(R.id.startButton);
+        startButton.setOnClickListener(this);
         pngImage = findViewById(R.id.pngImageView);
-        requestPermissions();
     }
 
     private void convertFile(){
-        presenter.getSourceFileAndConvert();
-    }
-
-    @Override
-    public void showOriginalImage(Bitmap sourceFile) {
-        jpgImage.setImageBitmap(sourceFile);
+        presenter.convertFileAndSave();
     }
 
     @Override
@@ -47,9 +43,14 @@ public class MainActivity extends MvpAppCompatActivity implements View {
         pngImage.setImageBitmap(convertedFile);
     }
 
+    @Override
+    public void onClick(View view) {
+        requestPermissions();
+    }
+
     private void requestPermissions() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-                || (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)) {
+                && (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)) {
             convertFile();
         } else {
             ActivityCompat.requestPermissions(this, new String[]{

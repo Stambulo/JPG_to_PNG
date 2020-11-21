@@ -8,29 +8,38 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class Model {
-    private static final File sourceFile = new File(String.valueOf(Environment.getExternalStoragePublicDirectory("/Download/jpg-to-png.jpg/")));
-    private static final File convertedFile = new File(String.valueOf(Environment.getExternalStoragePublicDirectory("/Download/jpg-to-png.png/")));
+    private static final File sourceFile = new File(String.valueOf(Environment.
+            getExternalStoragePublicDirectory("/Download/jpg-to-png.jpg/")));
 
-    public Model(){
-    }
+    private static final File convertedFile = new File(String.valueOf(Environment.
+            getExternalStoragePublicDirectory("/Download/jpg-to-png.png/")));
 
-    public Bitmap getSourceImage(){
-        return BitmapFactory.decodeFile(String.valueOf(sourceFile));
-    }
 
-    public void convertAndSave(){
+    public Bitmap convertAndSave() {
         Bitmap bmp = BitmapFactory.decodeFile(String.valueOf(sourceFile));
         try {
+            Thread.sleep(5000);
             FileOutputStream out = new FileOutputStream(convertedFile);
             bmp.compress(Bitmap.CompressFormat.PNG, 100, out);
             out.close();
-        } catch(IOException e){
-                e.printStackTrace();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
         }
+        return bmp;
     }
 
-    public Bitmap showConvertedFile(){
-        return BitmapFactory.decodeFile(String.valueOf(convertedFile));
+
+    public static class Producer{
+
+        public Single single(){
+            return Single.fromCallable(() -> new Model().convertAndSave()).
+                    subscribeOn(Schedulers.io()).
+                    observeOn(AndroidSchedulers.mainThread());
+        }
     }
 }

@@ -6,7 +6,6 @@ import moxy.MvpView;
 import moxy.viewstate.strategy.alias.AddToEndSingle;
 
 @AddToEndSingle
-public interface View extends MvpView {
-    void showOriginalImage(Bitmap sourceFile);
+public interface MainView extends MvpView {
     void showConvertedImage(Bitmap convertedFile);
 }
