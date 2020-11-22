@@ -3,6 +3,7 @@ package com.stambulo.jpgtopng;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +14,8 @@ import androidx.core.app.ActivityCompat;
 
 import com.stambulo.jpgtopng.presenter.Presenter;
 import com.stambulo.jpgtopng.view.MainView;
+
+import java.io.File;
 
 import moxy.MvpAppCompatActivity;
 import moxy.presenter.InjectPresenter;
@@ -39,8 +42,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, View
     }
 
     @Override
-    public void showConvertedImage(Bitmap convertedFile) {
-        pngImage.setImageBitmap(convertedFile);
+    public void showConvertedImage(File convertedFile) {
+        Bitmap bmp = BitmapFactory.decodeFile(String.valueOf(convertedFile));
+        pngImage.setImageBitmap(bmp);
     }
 
     @Override

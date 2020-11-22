@@ -20,17 +20,17 @@ public class Model {
             getExternalStoragePublicDirectory("/Download/jpg-to-png.png/")));
 
 
-    public Bitmap convertAndSave() {
+    public File convertAndSave() {
         Bitmap bmp = BitmapFactory.decodeFile(String.valueOf(sourceFile));
         try {
-            Thread.sleep(5000);
+            Thread.sleep(3000);
             FileOutputStream out = new FileOutputStream(convertedFile);
             bmp.compress(Bitmap.CompressFormat.PNG, 100, out);
             out.close();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-        return bmp;
+        return convertedFile;
     }
 
 

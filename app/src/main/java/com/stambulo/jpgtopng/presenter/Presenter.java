@@ -1,11 +1,9 @@
 package com.stambulo.jpgtopng.presenter;
 
-import android.graphics.Bitmap;
-import android.util.Log;
-import android.widget.Toast;
-
 import com.stambulo.jpgtopng.model.Model;
 import com.stambulo.jpgtopng.view.MainView;
+
+import java.io.File;
 
 import moxy.MvpPresenter;
 
@@ -31,9 +29,9 @@ public class Presenter extends MvpPresenter<MainView> {
 
         public void execSingle() {
             producer.single().subscribe((s) -> {
-                getViewState().showConvertedImage((Bitmap) s);
-                Log.i("--->", "onSuccess  -  " + s);
-            }, (e) -> Log.i("--->", "onError"));
+                getViewState().showConvertedImage((File) s);
+                //Log.i("--->", "onSuccess  -  " + s);
+            }, (e) -> {}); //Log.i("--->", "onError"));
         }
     }
 }
