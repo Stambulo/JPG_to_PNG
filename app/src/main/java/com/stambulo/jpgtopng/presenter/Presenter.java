@@ -6,6 +6,7 @@ import com.stambulo.jpgtopng.view.MainView;
 import java.io.File;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import moxy.MvpPresenter;
 
 public class Presenter extends MvpPresenter<MainView> {
@@ -29,7 +30,10 @@ public class Presenter extends MvpPresenter<MainView> {
         }
 
         public void execSingle() {
-            producer.getConvertedFile().subscribe((s) -> {
+            producer.getConvertedFile()
+                    .subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe((s) -> {
                 getViewState().showConvertedImage((File) s);
                 //Log.i("--->", "onSuccess  -  " + s);
             }, (e) -> {}); //Log.i("--->", "onError"));

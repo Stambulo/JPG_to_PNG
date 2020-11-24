@@ -36,6 +36,6 @@ public class Model {
 
     public Single getConvertedFile(){
         return Single.fromCallable(() -> new Model().convertAndSave()).
-                subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+                subscribeOn(Schedulers.io());
     }
 }
