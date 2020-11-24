@@ -34,12 +34,8 @@ public class Model {
     }
 
 
-    public static class Producer{
-
-        public Single single(){
-            return Single.fromCallable(() -> new Model().convertAndSave()).
-                    subscribeOn(Schedulers.io()).
-                    observeOn(AndroidSchedulers.mainThread());
-        }
+    public Single getConvertedFile(){
+        return Single.fromCallable(() -> new Model().convertAndSave()).
+                subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 }

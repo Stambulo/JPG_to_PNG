@@ -5,6 +5,7 @@ import com.stambulo.jpgtopng.view.MainView;
 
 import java.io.File;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import moxy.MvpPresenter;
 
 public class Presenter extends MvpPresenter<MainView> {
@@ -16,19 +17,19 @@ public class Presenter extends MvpPresenter<MainView> {
 
 
     public void convertFileAndSave(){
-        new Consumer(new Model.Producer()).execSingle();
+        new Consumer(new Model()).execSingle();
     }
 
 
     public class Consumer{
-        Model.Producer producer;
+        Model producer;
 
-        public Consumer(Model.Producer producer){
+        public Consumer(Model producer){
             this.producer = producer;
         }
 
         public void execSingle() {
-            producer.single().subscribe((s) -> {
+            producer.getConvertedFile().subscribe((s) -> {
                 getViewState().showConvertedImage((File) s);
                 //Log.i("--->", "onSuccess  -  " + s);
             }, (e) -> {}); //Log.i("--->", "onError"));

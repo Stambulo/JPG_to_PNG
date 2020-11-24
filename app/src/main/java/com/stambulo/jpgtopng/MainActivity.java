@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -43,8 +44,8 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, View
 
     @Override
     public void showConvertedImage(File convertedFile) {
-        Bitmap bmp = BitmapFactory.decodeFile(String.valueOf(convertedFile));
-        pngImage.setImageBitmap(bmp);
+        BackgroundConverter bgConverter = new BackgroundConverter();
+        bgConverter.execute(convertedFile);
     }
 
     @Override
@@ -69,6 +70,26 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, View
             if (grantResults.length == 2 && (grantResults[0] == PackageManager.PERMISSION_GRANTED || grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
                 convertFile();
             }
+        }
+    }
+
+    class BackgroundConverter extends AsyncTask<File, Void, Bitmap> {
+
+        @Override
+        protected Bitmap doInBackground(File... files) {
+            Bitmap bmp = BitmapFactory.decodeFile(String.valueOf(files[0]));
+            return bmp;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bmp) {
+            super.onPostExecute(bmp);
+            pngImage.setImageBitmap(bmp);
         }
     }
 }
